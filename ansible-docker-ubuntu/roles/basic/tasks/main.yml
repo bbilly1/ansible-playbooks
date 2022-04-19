@@ -1,0 +1,53 @@
+---
+
+- block:
+  - name: "update cache"
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: "upgrade all"
+    apt:
+      name: "*"
+      state: latest
+    register: upgraded
+
+  - name: "install basic packages"
+    apt:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+        - bmon
+        - build-essential
+        - curl
+        - htop
+        - iftop
+        - iotop
+        - mediainfo
+        - mlocate
+        - ranger
+        - rsync
+        - tmux
+        - trash-cli
+        - tree
+        - unzip
+        - vim
+        - whois
+        - zip
+        - zsh
+
+  - name: autoremove
+    apt:
+      autoremove: yes
+
+  - name: autoclean cache
+    apt:
+      autoclean: yes
+
+  - name: reboot the server
+    reboot:
+    when: upgraded is changed
+
+  become: true
+  become_user: root

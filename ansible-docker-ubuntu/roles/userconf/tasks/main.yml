@@ -1,0 +1,39 @@
+---
+
+- name: "create user folders"
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+  - bin
+  - docker
+  - docker
+  - logs
+  - script
+
+- name: "add ignore"
+  lineinfile:
+    create: true
+    path: .gitignore
+    line: .cfg
+
+- name: "clone zsh theme"
+  become: true
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: /usr/share/zsh-theme-powerlevel10k
+
+- name: "clone dotfiles"
+  git:
+    repo: https://git.oikeo-projects.com/simon/dotfiles.git
+    dest: .cfg
+    bare: true
+
+- name: "checkout dotfiles"
+  shell: git --git-dir=.cfg --work-tree=$HOME checkout
+
+- name: change user shell to zsh 
+  become: true
+  user:
+    name: "{{ regular_user }}"
+    shell: /bin/zsh

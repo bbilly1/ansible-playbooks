@@ -1,0 +1,38 @@
+---
+
+- block:
+  - name: "get newest release"
+    uri:                                                               
+      url: https://api.github.com/repos/docker/compose/releases/latest
+      return_content: true
+    register: json_reponse
+
+  - name: "get os"
+    command: uname -s
+    register: os
+
+  - name: "get arch"
+    command: uname -m
+    register: arch
+
+  - name: "create cli-plugins folder"
+    file:
+      path: /usr/local/lib/docker/cli-plugins
+      state: directory
+
+  - name: "download latest docker-compose"
+    get_url:                                                           
+      url: "https://github.com/docker/compose/releases/download/{{ json_reponse.json.tag_name }}/docker-compose-{{ os.stdout }}-{{ arch.stdout }}"
+      dest: /usr/local/lib/docker/cli-plugins/docker-compose
+      mode: '755'
+
+  - name: "get arch"
+    command: docker compose version
+    register: compose
+
+  - name: "latest docker-compose version"
+    debug:
+      msg: "installed docker compose version: {{ compose.stdout }}"
+
+  become: true
+  become_user: root

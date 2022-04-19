@@ -1,0 +1,57 @@
+---
+
+- block:
+  - name: "install docker dependencies"
+    apt:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+
+  - name: "add docker pgp key"
+    apt_key:
+      state: present
+      url: https://download.docker.com/linux/ubuntu/gpg
+
+  - name: "get release"
+    command: lsb_release -cs
+    register: release
+
+  - name: add docker repository to apt
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu {{ release.stdout }} stable
+      state: present
+
+  - name: "install docker dependencies"
+    apt:
+      update_cache: yes
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+  - name: "ensure docker group exists"
+    group:
+      name: docker
+      state: present
+
+  - name: "add user to group"
+    user:
+      name: "{{ regular_user }}"
+      groups: docker
+      append: yes
+
+  - name: "start docker if needed"
+    service:
+      name: docker
+      state: started
+
+  become: true
+  become_user: root
