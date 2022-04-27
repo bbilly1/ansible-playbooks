@@ -37,3 +37,12 @@
   user:
     name: "{{ regular_user }}"
     shell: /bin/zsh
+
+- name: "sudoers edit"
+  become: true
+  lineinfile:
+    path: /etc/sudoers
+    line: "{{ item }}"
+  loop:
+  - "{{ regular_user }} ALL=NOPASSWD:/sbin/poweroff"
+  - "{{ regular_user }} ALL=NOPASSWD:/sbin/reboot"
