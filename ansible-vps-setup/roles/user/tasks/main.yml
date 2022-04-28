@@ -1,0 +1,25 @@
+---
+
+- name: "create user"
+  user:
+    name: "{{ regular_user }}"
+    groups: sudo
+    append: yes
+    password: "{{ user_password | password_hash('sha512') }}"
+
+- name: "create ssh folder"
+  file:
+    path: "/home/{{ regular_user }}/.ssh"
+    state: directory
+    owner: "{{ regular_user }}"
+    group: "{{ regular_user }}"
+    mode: '0700'
+
+- name: "copy ssh key"
+  copy:
+    remote_src: yes
+    src: /root/.ssh/authorized_keys
+    dest: "/home/{{ regular_user }}/.ssh/authorized_keys"
+    owner: "{{ regular_user }}"
+    group: "{{ regular_user }}"
+    mode: '0600'

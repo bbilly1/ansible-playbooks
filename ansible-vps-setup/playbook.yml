@@ -1,0 +1,12 @@
+---
+
+- name: Setup and secure blank VPS
+  hosts: all
+  gather_facts: true
+  user: root
+  vars_files:
+    - vars.yml
+  roles:
+    - user
+    - ssh_secure
+    - ufw

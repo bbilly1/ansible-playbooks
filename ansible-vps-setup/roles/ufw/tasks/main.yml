@@ -1,0 +1,20 @@
+---
+
+- name: "update cache"
+  apt:
+    update_cache: yes
+
+- name: "install ufw"
+  apt:
+    name: ufw
+
+- name: deny everything and enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: deny
+
+- name: allow sshd port
+  community.general.ufw:
+    rule: allow
+    port: "{{ sshd_port }}"
+    proto: tcp

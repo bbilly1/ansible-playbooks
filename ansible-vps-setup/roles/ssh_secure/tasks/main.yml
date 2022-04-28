@@ -1,0 +1,59 @@
+---
+
+- name: "backup config"
+  copy:
+    remote_src: yes
+    src: /etc/ssh/sshd_config
+    dest: /etc/ssh/sshd_config.backup
+
+- name: "set sshd port"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#Port"
+    line: "Port {{ sshd_port }}"
+
+- name: "disable root login"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+
+- name: "enable PubkeyAuthentication"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#PubkeyAuthentication"
+    line: "PubkeyAuthentication yes"
+
+- name: "enable RSAAuthentication"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "RSAAuthentication yes"
+
+- name: "disable PasswordAuthentication"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+
+- name: "disable X11Forwarding"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^X11Forwarding"
+    line: "X11Forwarding no"
+
+- name: "disable PAM"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^UsePAM"
+    line: "UsePAM no"
+
+- name: "disable PrintLastLog"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#PrintLastLog"
+    line: "PrintLastLog no"
+
+- name: "restart ssh service"
+  service:
+    name: ssh
+    state: restarted

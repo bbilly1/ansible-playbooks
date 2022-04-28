@@ -1,0 +1,5 @@
+---
+
+regular_user: username
+user_password: password
+sshd_port: 2222
