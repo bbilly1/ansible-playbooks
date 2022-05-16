@@ -25,6 +25,7 @@
         - iotop
         - mediainfo
         - mlocate
+        - nmap
         - ranger
         - rsync
         - tmux
