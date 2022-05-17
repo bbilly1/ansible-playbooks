@@ -25,6 +25,7 @@
         - iotop
         - mediainfo
         - mlocate
+        - net-tools
         - nmap
         - ranger
         - rsync
