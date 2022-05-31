@@ -1,0 +1,56 @@
+---
+
+- block:
+  - name: "check if swap is there"
+    command: swapon -s
+    register: swap
+
+  - name: "get mem size"
+    shell: cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*'
+    register: mem_size
+    when: not swap.stdout
+
+  - name: "calc swap size"
+    set_fact:
+      swap_size: |
+                  {% if mem_size.stdout|int // 1024 > 4096 %}
+                    mem_size.stdout|int // 1024
+                  {% else %}
+                    4096
+                  {% endif %}
+    when: not swap.stdout
+
+  - name: "create swap file"
+    command: dd if=/dev/zero of=/swapfile bs=1M count={{ swap_size|int }}
+    when: not swap.stdout
+
+  - name: Set swap file permissions
+    file:
+      path: "/swapfile"
+      state: "file"
+      owner: "root"
+      group: "root"
+      mode: "0600"
+    when: not swap.stdout
+
+  - name: Initialize swap file
+    command: mkswap /swapfile
+    when: not swap.stdout
+
+  - name: Enable swap file
+    command: swapon /swapfile
+    when: not swap.stdout
+
+  - name: Manage swap file in /etc/fstab
+    mount:
+      src: "/swapfile"
+      name: "none"
+      fstype: "swap"
+      opts: "sw,nofail"
+      dump: "0"
+      passno: "0"
+      state: "present"
+    when: not swap.stdout
+
+  become: true
+  become_user: root
