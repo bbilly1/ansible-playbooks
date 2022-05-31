@@ -1,0 +1,69 @@
+---
+
+- block:
+  - name: copy trashcli service
+    copy:
+      src: files/trashcli.service
+      dest: /etc/systemd/system/trashcli.service
+      owner: root
+      group: root
+      mode: "0644"
+    register: copy_trashcli_service
+
+  - name: set user
+    replace:
+      path: /etc/systemd/system/trashcli.service
+      regexp: "=regular_user"
+      replace: "={{ regular_user }}"
+    when: copy_trashcli_service
+
+  - name: copy trashcli timer
+    copy:
+      src: files/trashcli.timer
+      dest: /etc/systemd/system/trashcli.timer
+      owner: root
+      group: root
+      mode: "0644"
+    when: copy_trashcli_service
+
+  - name: enable trashcli timer
+    systemd:
+      name: trashcli.timer
+      daemon_reload: yes
+      enabled: yes
+      state: started
+
+  - name: copy dockerclean service
+    copy:
+      src: files/dockerclean.service
+      dest: /etc/systemd/system/dockerclean.service
+      owner: root
+      group: root
+      mode: "0644"
+    register: copy_dockerclean_service
+
+  - name: set user
+    replace:
+      path: /etc/systemd/system/dockerclean.service
+      regexp: "=regular_user"
+      replace: "={{ regular_user }}"
+    when: copy_dockerclean_service
+
+  - name: copy dockerclean timer
+    copy:
+      src: files/dockerclean.timer
+      dest: /etc/systemd/system/dockerclean.timer
+      owner: root
+      group: root
+      mode: "0644"
+    when: copy_dockerclean_service
+
+  - name: enable dockerclean timer
+    systemd:
+      name: dockerclean.timer
+      daemon_reload: yes
+      enabled: yes
+      state: started
+
+  become: true
+  become_user: root

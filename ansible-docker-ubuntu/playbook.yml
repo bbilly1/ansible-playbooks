@@ -11,3 +11,4 @@
     - docker-compose
     - userconf
     - swap
+    - services

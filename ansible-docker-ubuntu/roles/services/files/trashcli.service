@@ -1,0 +1,8 @@
+[Unit]
+Description=empty trash daily older 3
+
+[Service]
+User=regular_user
+Group=regular_user
+Type=oneshot
+ExecStart=/usr/bin/trash-empty 3

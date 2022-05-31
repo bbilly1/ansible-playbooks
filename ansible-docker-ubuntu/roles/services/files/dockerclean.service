@@ -1,0 +1,8 @@
+[Unit]
+Descrition=run docker clean up
+
+[Service]
+User=regular_user
+Group=regular_user
+Type=oneshot
+ExecStart=/usr/bin/docker system prune -af

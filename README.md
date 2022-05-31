@@ -29,6 +29,8 @@ Ansible playbook to provision an standart Ubuntu LTS server VM. Expects the user
 - install `docker`
 - install `docker compose`
 - copy frequently used config files
+- configure swap
+- install maintenance services to clean trash and docker build cache
 
 ### Setup
 Copy or rename `vars.samle.yml` to `vars.yml` and set:

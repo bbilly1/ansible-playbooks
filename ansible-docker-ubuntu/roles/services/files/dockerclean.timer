@@ -1,0 +1,9 @@
+[Unit]
+Descrition=run docker clean up
+
+[Timer]
+OnBootSec=11min
+OnUnitActiveSec=7d
+
+[Install]
+WantedBy=multi-user.target
