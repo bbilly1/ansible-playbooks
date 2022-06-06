@@ -1,5 +1,5 @@
 [Unit]
-Descrition=run docker clean up
+Description=run docker clean up
 
 [Service]
 User=regular_user
