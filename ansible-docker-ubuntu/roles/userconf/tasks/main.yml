@@ -7,7 +7,6 @@
   loop:
   - bin
   - docker
-  - docker
   - logs
   - script
   - backup
