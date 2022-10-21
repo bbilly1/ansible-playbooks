@@ -26,7 +26,7 @@
       repo: deb https://download.docker.com/linux/ubuntu {{ release.stdout }} stable
       state: present
 
-  - name: "install docker dependencies"
+  - name: "install docker"
     apt:
       update_cache: yes
       name: "{{ packages }}"
