@@ -27,6 +27,7 @@
         - mlocate
         - net-tools
         - nmap
+        - pip
         - ranger
         - rsync
         - tmux
