@@ -16,6 +16,9 @@ Copy or rename `vars.samle.yml` to `vars.yml` and set:
 - **user_password**: Password for new user
 - **sshd_port**: Change ssh port
 
+### Note
+The port change is tested for Ubuntu 20.04 LTS and 22.04 LTS. This wont work for 21.10, as ubuntu changed ssh to use socket based activation.
+
 ### Run on a single host
 ```
 ansible-playbook -i $hostname, ansible-vps-setup/playbook.yml
