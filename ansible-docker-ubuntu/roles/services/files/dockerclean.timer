@@ -4,6 +4,7 @@ Description=run docker clean up
 [Timer]
 OnCalendar=weekly
 Persistent=true
+OnBootSec=60s
 
 [Install]
 WantedBy=multi-user.target
